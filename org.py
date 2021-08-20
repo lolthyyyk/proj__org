@@ -1,13 +1,15 @@
-from colorama import init,Fore,Back
-from pygments import highlight
-from pygments.lexers import PythonLexer, HtmlLexer, JavascriptLexer
-from pygments.formatters import TerminalFormatter
+from colorama 				import init,Fore,Back
+from pygments 				import highlight
+from pygments.lexers 		import PythonLexer, HtmlLexer, JavascriptLexer
+from pygments.formatters 	import TerminalFormatter
 import os
 import time
 
+from .objects.routine import routine
+
 init(autoreset=True)
 
-def file_dispatcher(filename):
+def file_qualifier(filename):
 	if filename.endswith('.html'):
 		with open(filename,encoding='utf8') as f:
 			return highlight(f.read(),HtmlLexer(),TerminalFormatter())
@@ -21,92 +23,6 @@ def file_dispatcher(filename):
 		with open(filename,encoding='utf8') as f:
 			return f.read()
 
-class OsComands:
-	def __init__(self):
-		if os.name == 'nt':
-			self._clear = 'cls'
-		elif os.name == 'posix':
-			self._clear = 'clear'
-
-class routine(object):
-	def _cyan(arg,Obj):
-		return Obj.CYAN + arg + Obj.RESET
-	def _red(arg,Obj):
-		return Obj.RED + arg + Obj.RESET
-	def _green(arg,Obj):
-		return Obj.GREEN + arg + Obj.RESET
-	def _yellow(arg,Obj):
-		return Obj.YELLOW + arg + Obj.RESET
-	def _clear():
-		os.system(OsComands()._clear)
-
-class Notifications:
-	def __init__(self):
-		self.important = []
-		self.usual = []
-	def addUsual(self,notification):
-		self.usual.append(notification)
-	def addImportant(self,notification):
-		self.imortant.append(notification)
-	def removeImportant(self,index):
-		self.important.pop(index)
-	def get(self):
-		output = '\n' 
-		for i in self.important:
-			output += f'[{routine._red(i,Fore)}]\n'
-		output+='\n'
-		for i in self.usual:
-			output += f'[{routine._green(i,Fore)}]\n'
-		self.usual = []
-		return output
-
-class Options:
-	def __init__(self):
-		self.filename = None
-		self.dir_opt = [
-			['Удалить папку',os.remove]
-		]
-		self.file_opt = [
-			['Удалить файл',os.remove]
-		]
-		self.cur_opt = None
-		self.pos = 1
-	def _iscurrent(self,count,arg):
-		if count == self.pos:
-			if self.cur_opt == None:
-				return routine._yellow(arg,Fore)
-			else:
-				return routine._green(arg,Fore)
-		else:
-			return arg
-	def after(self):
-		if len(self.cur_opt) == self.pos:
-			self.pos = 0
-		else:
-			self.pos += 1
-	def select(self):
-		if self.pos == 0:
-			return False
-		else:
-			self.cur_opt[self.pos-1][1](self.filename)
-			self.cur_opt = None
-			self.filename = None
-			return False
-	def get_options(self,item,org_opt):
-		self.filename = item
-		if org_opt == False:
-			return ""
-		count = 0
-		output = self._iscurrent(count,"\n\t<---\n")
-		if os.path.isdir(item):
-			self.cur_opt=self.dir_opt
-		else:
-			self.cur_opt=self.file_opt
-		for i in self.cur_opt:
-			count+=1
-			output+=f'\t{self._iscurrent(count,i[0])}'
-		return output
-			
 class Organizer:
 	def __init__(self,options_object,notifications_object):
 		self.pos = 1
@@ -140,9 +56,9 @@ class Organizer:
 						self.pos = 0
 				else:
 					# if os.listdir()[self.pos-1].endswith('.py')
-					if file_dispatcher(os.listdir()[self.pos-1]):
+					if file_qualifier(os.listdir()[self.pos-1]):
 						routine.clear()
-						print(file_dispatcher(os.listdir()[self.pos-1]),flush=True)
+						print(file_qualifier(os.listdir()[self.pos-1]),flush=True)
 						input(f"\nНАЖМИ {routine._green('ENTER',Fore)} ЧТО БЫ ПОКИНУТЬ РЕЖИМ ЧИТАТЕЛЯ")
 					else:
 						self.notifications.addUsual('Органайзер не умеет читать данный формат файлов')
@@ -158,47 +74,3 @@ class Organizer:
 			output += '  ' + self._iscurrent(count,i)+'\n'
 		output += self.notifications.get()
 		return output
-
-class Interface:
-	def __init__(self):
-		self.organizer = Organizer(Options,Notifications)
-	def run(self):
-		while True:
-			routine._clear()
-			print(self.organizer.render(),end='\r')
-			key = input()
-			self.react(key)
-	def react(self,key):
-		if key == 'help':
-			print(routine._green('Нажимая Enter вы даётё утилите команду'))
-			print(f"{routine._cyan('[help]')} - Получить данную подсказку")
-			print(f"{routine._cyan('[пустая строка]')} - Переместиться ниже")
-			print(f"{routine._cyan('[a]')} - Получить опции выбранного файла или директории")
-			print(f"{routine._cyan('[пробел]')} - Получить опции выбранного файла или директории")
-		elif key == ' ':
-			self.organizer.select()
-		elif key == '':
-			self.organizer.after()
-		elif key == 'a':
-			if self.organizer.pos != 0:
-				self.organizer.option = True
-
-
-if __name__ == '__main__':
-	routine._clear()
-	org = Organizer(Options,Notifications)
-	while True:
-		print(org.render())
-		# print(org.pos,end='\r')
-		key = input()
-		if key == '':
-			org.after()
-		elif key == ' ':
-			org.select()
-		elif key == 'a':
-			if org.pos != 0:
-				org.option =True
-		routine.clear()
-
-
-
