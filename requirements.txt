@@ -1,0 +1,2 @@
+colorama==0.4.4
+Pygments==2.10.0
