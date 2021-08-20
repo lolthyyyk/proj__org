@@ -5,23 +5,7 @@ from pygments.formatters 	import TerminalFormatter
 import os
 import time
 
-from .objects.routine import routine
-
-init(autoreset=True)
-
-def file_qualifier(filename):
-	if filename.endswith('.html'):
-		with open(filename,encoding='utf8') as f:
-			return highlight(f.read(),HtmlLexer(),TerminalFormatter())
-	if filename.endswith('.js'):
-		with open(filename,encoding='utf8') as f:
-			return highlight(f.read(),JavascriptLexer(),TerminalFormatter())
-	if filename.endswith('.py'):
-		with open(filename,encoding='utf8') as f:
-			return highlight(f.read(),PythonLexer(),TerminalFormatter())
-	if filename.endswith('.txt'):
-		with open(filename,encoding='utf8') as f:
-			return f.read()
+from .routine import routine
 
 class Organizer:
 	def __init__(self,options_object,notifications_object):
@@ -56,9 +40,9 @@ class Organizer:
 						self.pos = 0
 				else:
 					# if os.listdir()[self.pos-1].endswith('.py')
-					if file_qualifier(os.listdir()[self.pos-1]):
+					if routine._file_qualifier(os.listdir()[self.pos-1]):
 						routine.clear()
-						print(file_qualifier(os.listdir()[self.pos-1]),flush=True)
+						print(routine._file_qualifier(os.listdir()[self.pos-1]),flush=True)
 						input(f"\nНАЖМИ {routine._green('ENTER',Fore)} ЧТО БЫ ПОКИНУТЬ РЕЖИМ ЧИТАТЕЛЯ")
 					else:
 						self.notifications.addUsual('Органайзер не умеет читать данный формат файлов')

@@ -1,4 +1,7 @@
 import os
+from colorama import init
+
+init(autoreset=True)
 
 class routine(object):
 	def _cyan(arg,Obj):
@@ -11,6 +14,19 @@ class routine(object):
 		return Obj.YELLOW + arg + Obj.RESET
 	def _clear():
 		os.system(OsCommands()._clear)
+	def _file_qualifier(filename):
+		if filename.endswith('.html'):
+			with open(filename,encoding='utf8') as f:
+				return highlight(f.read(),HtmlLexer(),TerminalFormatter())
+		if filename.endswith('.js'):
+			with open(filename,encoding='utf8') as f:
+				return highlight(f.read(),JavascriptLexer(),TerminalFormatter())
+		if filename.endswith('.py'):
+			with open(filename,encoding='utf8') as f:
+				return highlight(f.read(),PythonLexer(),TerminalFormatter())
+		if filename.endswith('.txt'):
+			with open(filename,encoding='utf8') as f:
+				return f.read()
 
 class OsCommands:
 	def __init__(self):
