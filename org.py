@@ -29,15 +29,15 @@ class OsComands:
 			self._clear = 'clear'
 
 class routine(object):
-	def cyan(arg,Obj):
+	def _cyan(arg,Obj):
 		return Obj.CYAN + arg + Obj.RESET
-	def red(arg,Obj):
+	def _red(arg,Obj):
 		return Obj.RED + arg + Obj.RESET
-	def green(arg,Obj):
+	def _green(arg,Obj):
 		return Obj.GREEN + arg + Obj.RESET
-	def yellow(arg,Obj):
+	def _yellow(arg,Obj):
 		return Obj.YELLOW + arg + Obj.RESET
-	def clear():
+	def _clear():
 		os.system(OsComands()._clear)
 
 class Notifications:
@@ -53,10 +53,10 @@ class Notifications:
 	def get(self):
 		output = '\n' 
 		for i in self.important:
-			output += f'[{routine.red(i,Fore)}]\n'
+			output += f'[{routine._red(i,Fore)}]\n'
 		output+='\n'
 		for i in self.usual:
-			output += f'[{routine.green(i,Fore)}]\n'
+			output += f'[{routine._green(i,Fore)}]\n'
 		self.usual = []
 		return output
 
@@ -74,9 +74,9 @@ class Options:
 	def _iscurrent(self,count,arg):
 		if count == self.pos:
 			if self.cur_opt == None:
-				return routine.yellow(arg,Fore)
+				return routine._yellow(arg,Fore)
 			else:
-				return routine.green(arg,Fore)
+				return routine._green(arg,Fore)
 		else:
 			return arg
 	def after(self):
@@ -116,8 +116,8 @@ class Organizer:
 	def _iscurrent(self,count,arg):
 		if count == self.pos:
 			if os.listdir() == []:
-				return routine.yellow('>>>'+arg,Fore)
-			return routine.yellow('>>>'+arg,Fore)+self.options.get_options(os.listdir()[self.pos-1],self.option)
+				return routine._yellow('>>>'+arg,Fore)
+			return routine._yellow('>>>'+arg,Fore)+self.options.get_options(os.listdir()[self.pos-1],self.option)
 		else:
 			return arg
 	def after(self):
@@ -143,7 +143,7 @@ class Organizer:
 					if file_dispatcher(os.listdir()[self.pos-1]):
 						routine.clear()
 						print(file_dispatcher(os.listdir()[self.pos-1]),flush=True)
-						input(f"\nНАЖМИ {routine.green('ENTER',Fore)} ЧТО БЫ ПОКИНУТЬ РЕЖИМ ЧИТАТЕЛЯ")
+						input(f"\nНАЖМИ {routine._green('ENTER',Fore)} ЧТО БЫ ПОКИНУТЬ РЕЖИМ ЧИТАТЕЛЯ")
 					else:
 						self.notifications.addUsual('Органайзер не умеет читать данный формат файлов')
 					self.pos=1
@@ -164,17 +164,17 @@ class Interface:
 		self.organizer = Organizer(Options,Notifications)
 	def run(self):
 		while True:
-			routine.clear()
+			routine._clear()
 			print(self.organizer.render(),end='\r')
 			key = input()
 			self.react(key)
 	def react(self,key):
 		if key == 'help':
-			print(routine.green('Нажимая Enter вы даётё утилите команду'))
-			print(f"{routine.cyan('[help]')} - Получить данную подсказку")
-			print(f"{routine.cyan('[пустая строка]')} - Переместиться ниже")
-			print(f"{routine.cyan('[a]')} - Получить опции выбранного файла или директории")
-			print(f"{routine.cyan('[пробел]')} - Получить опции выбранного файла или директории")
+			print(routine._green('Нажимая Enter вы даётё утилите команду'))
+			print(f"{routine._cyan('[help]')} - Получить данную подсказку")
+			print(f"{routine._cyan('[пустая строка]')} - Переместиться ниже")
+			print(f"{routine._cyan('[a]')} - Получить опции выбранного файла или директории")
+			print(f"{routine._cyan('[пробел]')} - Получить опции выбранного файла или директории")
 		elif key == ' ':
 			self.organizer.select()
 		elif key == '':
@@ -185,7 +185,7 @@ class Interface:
 
 
 if __name__ == '__main__':
-	routine.clear()
+	routine._clear()
 	org = Organizer(Options,Notifications)
 	while True:
 		print(org.render())
