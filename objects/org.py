@@ -1,18 +1,14 @@
-from colorama 				import init,Fore,Back
-from pygments 				import highlight
-from pygments.lexers 		import PythonLexer, HtmlLexer, JavascriptLexer
-from pygments.formatters 	import TerminalFormatter
+from colorama 				import Fore,Back
 import os
-import time
 
 from .routine import routine
 
 class Organizer:
-	def __init__(self,options_object,notifications_object):
+	def __init__(self,options_class,interface):
 		self.pos = 1
 		self.option = False
-		self.options = options_object()
-		self.notifications = notifications_object()
+		self.options = options_class()
+		self.interface = interface
 	def _iscurrent(self,count,arg):
 		if count == self.pos:
 			if os.listdir() == []:
@@ -39,22 +35,11 @@ class Organizer:
 					if os.listdir() == []:
 						self.pos = 0
 				else:
-					# if os.listdir()[self.pos-1].endswith('.py')
 					if routine._file_qualifier(os.listdir()[self.pos-1]):
-						routine.clear()
+						routine._clear()
 						print(routine._file_qualifier(os.listdir()[self.pos-1]),flush=True)
 						input(f"\nНАЖМИ {routine._green('ENTER',Fore)} ЧТО БЫ ПОКИНУТЬ РЕЖИМ ЧИТАТЕЛЯ")
 					else:
-						self.notifications.addUsual('Органайзер не умеет читать данный формат файлов')
-					self.pos=1
-			#
+						self.interface.notifications.addUsual('Органайзер не умеет читать данный формат файлов')
 		if self.option == True:
 			self.option = self.options.select()
-	def render(self):
-		count=0
-		output=f"  {os.getcwd()}\n\n{self._iscurrent(count,'...')}\n\n"
-		for i in os.listdir():
-			count += 1
-			output += '  ' + self._iscurrent(count,i)+'\n'
-		output += self.notifications.get()
-		return output

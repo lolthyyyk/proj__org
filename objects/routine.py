@@ -1,3 +1,6 @@
+from pygments 				import highlight
+from pygments.lexers 		import PythonLexer, HtmlLexer, JavascriptLexer
+from pygments.formatters 	import TerminalFormatter
 import os
 from colorama import init
 
