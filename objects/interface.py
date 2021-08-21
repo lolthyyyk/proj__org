@@ -13,6 +13,7 @@ class Interface:
 			self.react(key)
 	def react(self,key):
 		if key == 'h':
+			routine._clear()
 			print(routine._green('Нажимая Enter вы даётё утилите команду',Fore))
 			print(f"{routine._cyan('[help]',Fore)}"+"\t\t - Получить данную подсказку")
 			print(f"{routine._cyan('[пустая строка]',Fore)}"+"\t - Переместиться ниже")

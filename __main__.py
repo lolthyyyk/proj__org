@@ -1,5 +1,3 @@
-from colorama import Fore,Back
-
 from .objects.interface  	import Interface
 from .objects.org  			import Organizer
 from .objects.notifications import Notifications
