@@ -3,7 +3,9 @@ from colorama import Fore
 from .routine import routine
 
 class Options:
+
 	def __init__(self):
+
 		self.filename = None
 		self.dir_opt = [
 			['Удалить папку',os.remove]
@@ -13,7 +15,9 @@ class Options:
 		]
 		self.cur_opt = None
 		self.pos = 1
+
 	def _iscurrent(self,count,arg):
+
 		if count == self.pos:
 			if self.cur_opt == None:
 				return routine._yellow(arg,Fore)
@@ -21,12 +25,16 @@ class Options:
 				return routine._green(arg,Fore)
 		else:
 			return arg
-	def after(self):
+
+	def after(self): # Переход на следущую опцию
+
 		if len(self.cur_opt) == self.pos:
 			self.pos = 0
 		else:
 			self.pos += 1
-	def select(self):
+
+	def select(self): # Выбор опции
+
 		if self.pos == 0:
 			return False
 		else:
@@ -34,7 +42,9 @@ class Options:
 			self.cur_opt = None
 			self.filename = None
 			return False
+
 	def get_options(self,item,org_opt):
+
 		self.filename = item
 		if org_opt == False:
 			return ""
@@ -45,6 +55,6 @@ class Options:
 		else:
 			self.cur_opt=self.file_opt
 		for i in self.cur_opt:
-			count+=1
-			output+=f'\t{self._iscurrent(count,i[0])}'
+			count+= 1
+			output+= f'\t{self._iscurrent(count,i[0])}'
 		return output
