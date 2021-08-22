@@ -37,7 +37,7 @@ class Interface:
 			if count == self.organizer.pos:
 				if brief["items"] == []:
 					return routine._yellow('>>>'+arg,Fore)
-				return routine._yellow('>>>'+arg,Fore)+self.organizer.options.get_options(brief["items"][self.organizer.pos-1],self.organizer.option)
+				return routine._yellow('>>>'+arg,Fore)+self.organizer.options.render(brief["items"][self.organizer.pos-1],self.organizer.option)
 			else:
 				return "   " + arg
 

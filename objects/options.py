@@ -43,7 +43,7 @@ class Options:
 			self.filename = None
 			return False
 
-	def get_options(self,item,org_opt):
+	def render(self,item,org_opt):
 
 		self.filename = item
 		if org_opt == False:
